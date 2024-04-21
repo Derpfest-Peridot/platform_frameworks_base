@@ -25,6 +25,7 @@ import static com.android.systemui.Flags.smartspaceRelocateToBottom;
 
 import android.annotation.Nullable;
 import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -35,6 +36,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 
+import com.android.systemui.Dependency;
 import com.android.systemui.Dumpable;
 import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.dagger.qualifiers.Main;
@@ -61,6 +63,7 @@ import com.android.systemui.statusbar.phone.NotificationIconContainer;
 import com.android.systemui.util.ViewController;
 import com.android.systemui.util.concurrency.DelayableExecutor;
 import com.android.systemui.util.settings.SecureSettings;
+import com.android.systemui.util.settings.SystemSettings;
 
 import kotlinx.coroutines.DisposableHandle;
 
@@ -82,6 +85,7 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
     private final KeyguardSliceViewController mKeyguardSliceViewController;
     private final LockscreenSmartspaceController mSmartspaceController;
     private final SecureSettings mSecureSettings;
+    private final SystemSettings mSystemSettings;
     private final DumpManager mDumpManager;
     private final ClockEventController mClockEventController;
     private final LogBuffer mLogBuffer;
@@ -107,6 +111,8 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
     private final KeyguardUnlockAnimationController mKeyguardUnlockAnimationController;
     private final InWindowLauncherUnlockAnimationManager mInWindowLauncherUnlockAnimationManager;
 
+    private int mWeatherProvider;
+
     private boolean mShownOnSecondaryDisplay = false;
     private boolean mOnlyClock = false;
     private KeyguardInteractor mKeyguardInteractor;
@@ -125,8 +131,8 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
     };
     private final ContentObserver mShowWeatherObserver = new ContentObserver(null) {
         @Override
-        public void onChange(boolean change) {
-            setWeatherVisibility();
+        public void onChange(boolean change, Uri uri) {
+            updateWeatherView();
         }
     };
 
@@ -150,6 +156,7 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
             NotificationIconContainerAlwaysOnDisplayViewBinder nicViewBinder,
             KeyguardUnlockAnimationController keyguardUnlockAnimationController,
             SecureSettings secureSettings,
+            SystemSettings systemSettings,
             @Main DelayableExecutor uiExecutor,
             @Background Executor bgExecutor,
             DumpManager dumpManager,
@@ -165,6 +172,7 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
         mSmartspaceController = smartspaceController;
         mNicViewBinder = nicViewBinder;
         mSecureSettings = secureSettings;
+        mSystemSettings = systemSettings;
         mUiExecutor = uiExecutor;
         mBgExecutor = bgExecutor;
         mKeyguardUnlockAnimationController = keyguardUnlockAnimationController;
@@ -294,31 +302,43 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
                     mShowWeatherObserver,
                     UserHandle.USER_ALL
             );
+
+            mSystemSettings.registerContentObserverForUserSync(
+                    Settings.System.LOCKSCREEN_WEATHER_PROVIDER,
+                    false, /* notifyForDescendants */
+                    mShowWeatherObserver,
+                    UserHandle.USER_ALL
+            );
         });
 
         updateDoubleLineClock();
+        updateWeatherView();
 
         mKeyguardUnlockAnimationController.addKeyguardUnlockAnimationListener(
                 mKeyguardUnlockAnimationListener);
 
-        if (mSmartspaceController.isEnabled()) {
-            View ksv = mView.findViewById(R.id.keyguard_slice_view);
-            int viewIndex = mStatusArea.indexOfChild(ksv);
-            ksv.setVisibility(View.GONE);
+        updateViews();
+    }
 
+    private void updateViews() {
+        if (mSmartspaceController.isEnabled()) {
             removeViewsFromStatusArea();
+
+            if (mWeatherProvider != Settings.System.LOCKSCREEN_WEATHER_PROVIDER_DEFAULT)
+                return;
+
             addSmartspaceView();
-            // TODO(b/261757708): add content observer for the Settings toggle and add/remove
-            //  weather according to the Settings.
             if (mSmartspaceController.isDateWeatherDecoupled()) {
                 addDateWeatherView();
+                setDateWeatherVisibility();
+                setWeatherVisibility();
             }
         }
+
         if (!MigrateClocksToBlueprint.isEnabled()) {
             setDateWeatherVisibility();
             setWeatherVisibility();
         }
-
     }
 
     int getNotificationIconAreaHeight() {
@@ -351,17 +371,16 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
                 mKeyguardUnlockAnimationListener);
     }
 
+    public void updateWeatherView() {
+        mWeatherProvider = mSystemSettings.getIntForUser(
+                Settings.System.LOCKSCREEN_WEATHER_PROVIDER,
+                Settings.System.LOCKSCREEN_WEATHER_PROVIDER_DEFAULT,
+                UserHandle.USER_CURRENT);
+        updateViews();
+    }
+
     void onLocaleListChanged() {
-        if (mSmartspaceController.isEnabled()) {
-            removeViewsFromStatusArea();
-            addSmartspaceView();
-            if (mSmartspaceController.isDateWeatherDecoupled()) {
-                mDateWeatherView.removeView(mWeatherView);
-                addDateWeatherView();
-                setDateWeatherVisibility();
-                setWeatherVisibility();
-            }
-        }
+        updateViews();
     }
 
     private void addDateWeatherView() {
@@ -681,8 +700,11 @@ public class KeyguardClockSwitchController extends ViewController<KeyguardClockS
             return false;
         }
 
+        final boolean shouldShow =
+                mWeatherProvider != Settings.System.LOCKSCREEN_WEATHER_PROVIDER_NONE;
+
         return ((mCurrentClockSize == LARGE) ? clock.getLargeClock() : clock.getSmallClock())
-                .getConfig().getHasCustomWeatherDataDisplay();
+                .getConfig().getHasCustomWeatherDataDisplay() && shouldShow;
     }
 
     private void removeViewsFromStatusArea() {

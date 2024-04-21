@@ -32,7 +32,8 @@ import android.os.Handler
 import android.os.UserHandle
 import android.provider.Settings.Secure.LOCK_SCREEN_ALLOW_PRIVATE_NOTIFICATIONS
 import android.provider.Settings.Secure.LOCK_SCREEN_SHOW_NOTIFICATIONS
-import android.provider.Settings.Secure.LOCK_SCREEN_WEATHER_ENABLED
+import android.provider.Settings.System.LOCKSCREEN_WEATHER_PROVIDER
+import android.provider.Settings.System.LOCKSCREEN_WEATHER_PROVIDER_DEFAULT
 import android.util.Log
 import android.view.ContextThemeWrapper
 import android.view.View
@@ -73,6 +74,7 @@ import com.android.systemui.util.asIndenting
 import com.android.systemui.util.concurrency.Execution
 import com.android.systemui.util.printCollection
 import com.android.systemui.util.settings.SecureSettings
+import com.android.systemui.util.settings.SystemSettings
 import com.android.systemui.util.time.SystemClock
 import java.io.PrintWriter
 import java.time.Instant
@@ -94,6 +96,7 @@ constructor(
     private val falsingManager: FalsingManager,
     private val systemClock: SystemClock,
     private val secureSettings: SecureSettings,
+    private val systemSettings: SystemSettings,
     private val userTracker: UserTracker,
     private val contentResolver: ContentResolver,
     private val configurationController: ConfigurationController,
@@ -316,13 +319,13 @@ constructor(
 
     val isDateWeatherDecoupled: Boolean = datePlugin != null && weatherPlugin != null
 
-    val isWeatherEnabled: Boolean
-        get() {
-            val showWeather =
-                secureSettings.getIntForUser(LOCK_SCREEN_WEATHER_ENABLED, 1, userTracker.userId) ==
-                    1
-            return showWeather
-        }
+    fun isWeatherEnabled(): Boolean {
+        val showWeather = systemSettings.getIntForUser(
+            LOCKSCREEN_WEATHER_PROVIDER,
+            LOCKSCREEN_WEATHER_PROVIDER_DEFAULT,
+            userTracker.userId) == LOCKSCREEN_WEATHER_PROVIDER_DEFAULT
+        return showWeather
+    }
 
     private fun updateBypassEnabled() {
         val bypassEnabled = bypassController.bypassEnabled
