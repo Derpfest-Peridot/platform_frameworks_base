@@ -783,17 +783,7 @@ public class FingerprintProvider implements IBinder.DeathRecipient, ServiceProvi
 
     @Override
     public void setIgnoreDisplayTouches(long requestId, int sensorId, boolean ignoreTouches) {
-        if (Flags.setIgnoreSpeedUp()) {
-            try {
-                mFingerprintSensors.get(
-                        sensorId).getLazySession().get().getSession().setIgnoreDisplayTouches(
-                        ignoreTouches);
-                Slog.d(getTag(), "setIgnoreDisplayTouches set to " + ignoreTouches);
-            } catch (Exception e) {
-                Slog.w(getTag(), "setIgnore failed", e);
-            }
-        } else {
-            mFingerprintSensors.get(sensorId).getScheduler().getCurrentClientIfMatches(
+        mFingerprintSensors.get(sensorId).getScheduler().getCurrentClientIfMatches(
                 requestId, (client) -> {
                     if (!(client instanceof Udfps)) {
                         Slog.e(getTag(),
@@ -802,7 +792,6 @@ public class FingerprintProvider implements IBinder.DeathRecipient, ServiceProvi
                     }
                     ((Udfps) client).setIgnoreDisplayTouches(ignoreTouches);
                 });
-        }
     }
 
     @Override
