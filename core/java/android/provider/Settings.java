@@ -6621,30 +6621,6 @@ public final class Settings {
         public static final String QS_TRANSPARENCY = "qs_transparency";
 
         /**
-         * Provider for lockscreen weather
-         * Currently supported values:
-         * {@link #LOCKSCREEN_WEATHER_PROVIDER_NONE}
-         * {@link #LOCKSCREEN_WEATHER_PROVIDER_DEFAULT}
-         * {@link #LOCKSCREEN_WEATHER_PROVIDER_OMNI}
-         * @hide
-         */
-        public static final String LOCKSCREEN_WEATHER_PROVIDER = "lockscreen_weather_provider";
-
-        /**
-         * Value for {@link #LOCKSCREEN_WEATHER_PROVIDER}
-         * none - hide weather
-         * @hide
-         */
-        public static final int LOCKSCREEN_WEATHER_PROVIDER_NONE = 0;
-
-        /**
-         * Value for {@link #LOCKSCREEN_WEATHER_PROVIDER}
-         * default - aka smartspace / at a glance
-         * @hide
-         */
-        public static final int LOCKSCREEN_WEATHER_PROVIDER_DEFAULT = 1;
-
-        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
