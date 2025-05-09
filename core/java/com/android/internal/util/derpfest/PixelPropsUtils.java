@@ -64,11 +64,13 @@ public final class PixelPropsUtils {
     private static final Map<String, Object> propsToChangePixelXL;
     private static final Map<String, Object> propsToChangeROG6;
     private static final Map<String, Object> propsToChangeLenovoY700;
-    private static final Map<String, Object> propsToChangeOP8P;
+    private static final Map<String, Object> propsToChangeOP13;
+    private static final Map<String, Object> propsToChangeS25U;    
     private static final Map<String, Object> propsToChangeOP9P;
     private static final Map<String, Object> propsToChangeMI11TP;
     private static final Map<String, Object> propsToChangeMI13P;
-    private static final Map<String, Object> propsToChangeF5;
+    private static final Map<String, Object> propsToChangeROG;
+    private static final Map<String, Object> propsToChangeROG9P;
     private static final Map<String, Object> propsToChangeBS4;
 
     private static final String[] pTensorCodenames = {
@@ -132,18 +134,23 @@ public final class PixelPropsUtils {
             "com.vng.codmvn"
     };
 
-    // Packages to Spoof as OnePlus 8 Pro
-    private static final String[] packagesToChangeOP8P = {
+    // Packages to Spoof as OnePlus 13
+    private static final String[] packagesToChangeOP13 = {
             "com.netease.lztgglobal",
-            "com.pubg.imobile",
-            "com.pubg.krmobile",
-            "com.rekoo.pubgm",
             "com.riotgames.league.wildrift",
             "com.riotgames.league.wildrifttw",
             "com.riotgames.league.wildriftvn",
             "com.riotgames.league.teamfighttactics",
             "com.riotgames.league.teamfighttacticstw",
             "com.riotgames.league.teamfighttacticsvn",
+            "com.garena.game.df",
+    };
+
+    // Packages to Spoof as Samsung Galaxy S25 Ultra
+    private static final String[] packagesToChangeS25U = {
+            "com.pubg.imobile",
+            "com.pubg.krmobile",
+            "com.rekoo.pubgm",
             "com.tencent.ig",
             "com.tencent.tmgp.pubgmhd",
             "com.vng.pubgmobile"
@@ -170,10 +177,31 @@ public final class PixelPropsUtils {
             "com.tencent.tmgp.sgame"
     };
 
-    // Packages to Spoof as POCO F5
-    private static final String[] packagesToChangeF5 = {
+    // Packages to Spoof as ROG
+    private static final String[] packagesToChangeROG = {
             "com.dts.freefiremax",
             "com.dts.freefireth",
+    };
+
+    // Packages to Spoof as ROG9P
+    private static final String[] packagesToChangeROG9P = {
+            "com.mobilelegends.mi",
+            "com.supercell.brawlstars",
+            "com.blizzard.diablo.immortal",
+            "com.netease.newspike",
+            "com.activision.callofduty.warzone",
+            "com.pubg.newstate",
+            "com.gamedevltd.destinywarfare",
+            "com.pikpok.dr2.play",
+            "com.CarXTech.highWay",
+            "com.nekki.shadowfight3",
+            "com.nekki.shadowfightarena",
+            "com.gameloft.android.ANMP.GloftA8HM",
+            "com.nekki.shadowfight",
+            "com.ea.game.nfs14_row",
+            "com.ea.games.r3_row",
+            "com.supercell.squad",
+            "com.blitzteam.battleprime",
             "com.mobile.legends"
     };
 
@@ -224,9 +252,12 @@ public final class PixelPropsUtils {
         propsToChangeLenovoY700 = new HashMap<>();
         propsToChangeLenovoY700.put("MODEL", "Lenovo TB-9707F");
         propsToChangeLenovoY700.put("MANUFACTURER", "lenovo");
-        propsToChangeOP8P = new HashMap<>();
-        propsToChangeOP8P.put("MODEL", "IN2020");
-        propsToChangeOP8P.put("MANUFACTURER", "OnePlus");
+        propsToChangeOP13 = new HashMap<>();
+        propsToChangeOP13.put("MODEL", "PJZ110");
+        propsToChangeOP13.put("MANUFACTURER", "OnePlus");
+        propsToChangeS25U = new HashMap<>();
+        propsToChangeS25U.put("MODEL", "SM-S938B");
+        propsToChangeS25U.put("MANUFACTURER", "samsung");
         propsToChangeOP9P = new HashMap<>();
         propsToChangeOP9P.put("MODEL", "LE2123");
         propsToChangeOP9P.put("MANUFACTURER", "OnePlus");
@@ -237,9 +268,16 @@ public final class PixelPropsUtils {
         propsToChangeMI13P.put("BRAND", "Xiaomi");
         propsToChangeMI13P.put("MANUFACTURER", "Xiaomi");
         propsToChangeMI13P.put("MODEL", "2210132C");
-        propsToChangeF5 = new HashMap<>();
-        propsToChangeF5.put("MODEL", "23049PCD8G");
-        propsToChangeF5.put("MANUFACTURER", "Xiaomi");
+        propsToChangeROG = new HashMap<>();
+        propsToChangeROG.put("BRAND", "Asus");
+        propsToChangeROG.put("MANUFACTURER", "Asus");
+        propsToChangeROG.put("DEVICE", "ROG Phone");
+        propsToChangeROG.put("MODEL", "ASUS_Z01QD");
+        propsToChangeROG9P = new HashMap<>();
+        propsToChangeROG9P.put("BRAND", "Asus");
+        propsToChangeROG9P.put("MANUFACTURER", "Asus");
+        propsToChangeROG9P.put("DEVICE", "ROG Phone 9 PRO");
+        propsToChangeROG9P.put("MODEL", "ASUS_AI2501");
         propsToChangeBS4 = new HashMap<>();
         propsToChangeBS4.put("MODEL", "2SM-X706B");
         propsToChangeBS4.put("MANUFACTURER", "blackshark");
@@ -315,13 +353,20 @@ public final class PixelPropsUtils {
                     Object value = prop.getValue();
                     setPropValue(key, value);
                 }
-            } else if (Arrays.asList(packagesToChangeOP8P).contains(packageName)) {
+            } else if (Arrays.asList(packagesToChangeOP13).contains(packageName)) {
                 if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
-                for (Map.Entry<String, Object> prop : propsToChangeOP8P.entrySet()) {
+                for (Map.Entry<String, Object> prop : propsToChangeOP13.entrySet()) {
                     String key = prop.getKey();
                     Object value = prop.getValue();
                     setPropValue(key, value);
                 }
+            } else if (Arrays.asList(packagesToChangeS25U).contains(packageName)) {
+                if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
+                for (Map.Entry<String, Object> prop : propsToChangeS25U.entrySet()) {
+                    String key = prop.getKey();
+                    Object value = prop.getValue();
+                    setPropValue(key, value);
+                }    
             } else if (Arrays.asList(packagesToChangeOP9P).contains(packageName)) {
                 if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
                 for (Map.Entry<String, Object> prop : propsToChangeOP9P.entrySet()) {
@@ -343,9 +388,16 @@ public final class PixelPropsUtils {
                     Object value = prop.getValue();
                     setPropValue(key, value);
                 }
-            } else if (Arrays.asList(packagesToChangeF5).contains(packageName)) {
+            } else if (Arrays.asList(packagesToChangeROG).contains(packageName)) {
                 if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
-                for (Map.Entry<String, Object> prop : propsToChangeF5.entrySet()) {
+                for (Map.Entry<String, Object> prop : propsToChangeROG.entrySet()) {
+                    String key = prop.getKey();
+                    Object value = prop.getValue();
+                    setPropValue(key, value);
+                }
+            } else if (Arrays.asList(packagesToChangeROG9P).contains(packageName)) {
+                if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
+                for (Map.Entry<String, Object> prop : propsToChangeROG9P.entrySet()) {
                     String key = prop.getKey();
                     Object value = prop.getValue();
                     setPropValue(key, value);
