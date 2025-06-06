@@ -152,6 +152,8 @@ public final class PixelPropsUtils {
             "com.pubg.krmobile",
             "com.rekoo.pubgm",
             "com.tencent.ig",
+            "com.mobiin.gp",
+            "com.mobile.legends",
             "com.tencent.tmgp.pubgmhd",
             "com.vng.pubgmobile"
     };
@@ -202,7 +204,6 @@ public final class PixelPropsUtils {
             "com.ea.games.r3_row",
             "com.supercell.squad",
             "com.blitzteam.battleprime",
-            "com.mobile.legends"
     };
 
     // Packages to Spoof as Black Shark 4
@@ -250,14 +251,18 @@ public final class PixelPropsUtils {
         propsToChangeROG6.put("DEVICE", "AI2201");
         propsToChangeROG6.put("MODEL", "ASUS_AI2201");
         propsToChangeLenovoY700 = new HashMap<>();
+        propsToChangeLenovoY700.put("BRAND", "Lenovo");
+        propsToChangeLenovoY700.put("DEVICE", "Lenovo Y700");
+        propsToChangeLenovoY700.put("MANUFACTURER", "Lenovo");
         propsToChangeLenovoY700.put("MODEL", "Lenovo TB-9707F");
-        propsToChangeLenovoY700.put("MANUFACTURER", "lenovo");
         propsToChangeOP13 = new HashMap<>();
         propsToChangeOP13.put("MODEL", "PJZ110");
         propsToChangeOP13.put("MANUFACTURER", "OnePlus");
         propsToChangeS25U = new HashMap<>();
-        propsToChangeS25U.put("MODEL", "SM-S938B");
+        propsToChangeS25U.put("BRAND", "Samsung");
+        propsToChangeS25U.put("DEVICE", "Samsung S25 Ultra");
         propsToChangeS25U.put("MANUFACTURER", "samsung");
+        propsToChangeS25U.put("MODEL", "SM-S938B");
         propsToChangeOP9P = new HashMap<>();
         propsToChangeOP9P.put("MODEL", "LE2123");
         propsToChangeOP9P.put("MANUFACTURER", "OnePlus");
@@ -270,13 +275,13 @@ public final class PixelPropsUtils {
         propsToChangeMI13P.put("MODEL", "2210132C");
         propsToChangeROG = new HashMap<>();
         propsToChangeROG.put("BRAND", "Asus");
-        propsToChangeROG.put("MANUFACTURER", "Asus");
+        propsToChangeROG.put("MANUFACTURER", "asus");
         propsToChangeROG.put("DEVICE", "ROG Phone");
         propsToChangeROG.put("MODEL", "ASUS_Z01QD");
         propsToChangeROG9P = new HashMap<>();
         propsToChangeROG9P.put("BRAND", "Asus");
-        propsToChangeROG9P.put("MANUFACTURER", "Asus");
         propsToChangeROG9P.put("DEVICE", "ROG Phone 9 PRO");
+        propsToChangeROG9P.put("MANUFACTURER", "Asus");
         propsToChangeROG9P.put("MODEL", "ASUS_AI2501");
         propsToChangeBS4 = new HashMap<>();
         propsToChangeBS4.put("MODEL", "2SM-X706B");
