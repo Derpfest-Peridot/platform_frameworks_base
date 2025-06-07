@@ -69,9 +69,9 @@ public final class PixelPropsUtils {
     private static final Map<String, Object> propsToChangeOP9P;
     private static final Map<String, Object> propsToChangeMI11TP;
     private static final Map<String, Object> propsToChangeMI13P;
-    private static final Map<String, Object> propsToChangeROG;
     private static final Map<String, Object> propsToChangeROG9P;
     private static final Map<String, Object> propsToChangeBS4;
+    private static final Map<String, Object> propsToChangeRMX14;
 
     private static final String[] pTensorCodenames = {
             "comet",
@@ -179,12 +179,6 @@ public final class PixelPropsUtils {
             "com.tencent.tmgp.sgame"
     };
 
-    // Packages to Spoof as ROG
-    private static final String[] packagesToChangeROG = {
-            "com.dts.freefiremax",
-            "com.dts.freefireth",
-    };
-
     // Packages to Spoof as ROG9P
     private static final String[] packagesToChangeROG9P = {
             "com.mobilelegends.mi",
@@ -209,6 +203,12 @@ public final class PixelPropsUtils {
     // Packages to Spoof as Black Shark 4
     private static final String[] packagesToChangeBS4 = {
             "com.proximabeta.mf.uamo"
+    };
+
+    // Packages to Spoof as Realme 14
+    private static final String[] packagesToChangeRMX14 = {
+            "com.dts.freefireth",
+            "com.dts.freefiremax"
     };
 
     private static volatile boolean sIsFinsky = false;
@@ -273,11 +273,6 @@ public final class PixelPropsUtils {
         propsToChangeMI13P.put("BRAND", "Xiaomi");
         propsToChangeMI13P.put("MANUFACTURER", "Xiaomi");
         propsToChangeMI13P.put("MODEL", "2210132C");
-        propsToChangeROG = new HashMap<>();
-        propsToChangeROG.put("BRAND", "Asus");
-        propsToChangeROG.put("MANUFACTURER", "asus");
-        propsToChangeROG.put("DEVICE", "ROG Phone");
-        propsToChangeROG.put("MODEL", "ASUS_Z01QD");
         propsToChangeROG9P = new HashMap<>();
         propsToChangeROG9P.put("BRAND", "Asus");
         propsToChangeROG9P.put("DEVICE", "ROG Phone 9 PRO");
@@ -286,6 +281,11 @@ public final class PixelPropsUtils {
         propsToChangeBS4 = new HashMap<>();
         propsToChangeBS4.put("MODEL", "2SM-X706B");
         propsToChangeBS4.put("MANUFACTURER", "blackshark");
+        propsToChangeRMX14 = new HashMap<>();
+        propsToChangeRMX14.put("BRAND", "Realme");
+        propsToChangeRMX14.put("DEVICE", "Realme 14");
+        propsToChangeRMX14.put("MANUFACTURER", "Realme");
+        propsToChangeRMX14.put("MODEL", "RMX5070");
     }
 
     public static void setProps(Context context) {
@@ -393,13 +393,6 @@ public final class PixelPropsUtils {
                     Object value = prop.getValue();
                     setPropValue(key, value);
                 }
-            } else if (Arrays.asList(packagesToChangeROG).contains(packageName)) {
-                if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
-                for (Map.Entry<String, Object> prop : propsToChangeROG.entrySet()) {
-                    String key = prop.getKey();
-                    Object value = prop.getValue();
-                    setPropValue(key, value);
-                }
             } else if (Arrays.asList(packagesToChangeROG9P).contains(packageName)) {
                 if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
                 for (Map.Entry<String, Object> prop : propsToChangeROG9P.entrySet()) {
@@ -410,6 +403,13 @@ public final class PixelPropsUtils {
             } else if (Arrays.asList(packagesToChangeBS4).contains(packageName)) {
                 if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
                 for (Map.Entry<String, Object> prop : propsToChangeBS4.entrySet()) {
+                    String key = prop.getKey();
+                    Object value = prop.getValue();
+                    setPropValue(key, value);
+                }
+            } else if (Arrays.asList(packagesToChangeRMX14).contains(packageName)) {
+                if (DEBUG) Log.d(TAG, "Defining props for: " + packageName);
+                for (Map.Entry<String, Object> prop : propsToChangeRMX14.entrySet()) {
                     String key = prop.getKey();
                     Object value = prop.getValue();
                     setPropValue(key, value);
