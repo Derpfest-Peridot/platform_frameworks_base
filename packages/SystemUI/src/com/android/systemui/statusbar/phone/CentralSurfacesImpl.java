@@ -1677,7 +1677,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
         Trace.endSection();
     }
 
-    protected ShadeViewController getShadeViewController() {
+    public ShadeViewController getShadeViewController() {
         return mShadeSurface;
     }
 
@@ -3449,11 +3449,6 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces,
     @Override
     public void startPendingIntentDismissingKeyguard(PendingIntent intent) {
         mActivityStarter.startPendingIntentDismissingKeyguard(intent);
-    }
-
-    @Override
-    public ShadeViewController getNotificationPanelViewController() {
-        return mShadeSurface;
     }
 
     @Override
