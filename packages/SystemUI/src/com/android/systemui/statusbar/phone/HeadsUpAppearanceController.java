@@ -317,6 +317,12 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
      *
      */
     private void hide(View view, int endState, Runnable callback) {
+        if (view == null) {
+            if (callback != null) {
+                callback.run();
+            }
+            return;
+        }
         if (mAnimationsEnabled) {
             CrossFadeHelper.fadeOut(view, CONTENT_FADE_DURATION /* duration */,
                     0 /* delay */, () -> {
@@ -334,6 +340,9 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
     }
 
     private void show(View view) {
+        if (view == null) {
+            return;
+        }
         if (mAnimationsEnabled) {
             CrossFadeHelper.fadeIn(view, CONTENT_FADE_DURATION /* duration */,
                     CONTENT_FADE_DELAY /* delay */);
